@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static BaseHand;
 
-public class MainHand : MonoBehaviour
+public class MainHand : BaseHand
 {
 
     private HandType myType;
