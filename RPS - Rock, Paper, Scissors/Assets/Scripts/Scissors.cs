@@ -5,5 +5,9 @@ using UnityEngine;
 public class Scissors : BaseHand
 {
 
+    private void Start()
+    {
+        type = HandType.Scissors;
+    }
 
 }
