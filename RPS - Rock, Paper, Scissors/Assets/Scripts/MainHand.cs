@@ -10,6 +10,7 @@ public class MainHand : BaseHand
 
     private void Awake()
     {
+        // Getting the type of this hand.
         myType = GetHandType(gameObject);
     }
 
