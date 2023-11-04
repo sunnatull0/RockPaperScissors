@@ -26,7 +26,7 @@ public class MainHand : BaseHand
         {
             // Rock check.
             case (HandType.Rock, HandType.Paper):
-                Lose();
+                Loss();
                 break;
             case (HandType.Rock, HandType.Scissors):
                 Win();
@@ -40,7 +40,7 @@ public class MainHand : BaseHand
                 Win();
                 break;
             case (HandType.Paper, HandType.Scissors):
-                Lose();
+                Loss();
                 break;
             case (HandType.Paper, HandType.Paper):
                 Draw();
@@ -51,7 +51,7 @@ public class MainHand : BaseHand
                 Win();
                 break;
             case (HandType.Scissors, HandType.Rock):
-                Lose();
+                Loss();
                 break;
             case (HandType.Scissors, HandType.Scissors):
                 Draw();
@@ -59,20 +59,19 @@ public class MainHand : BaseHand
         }
     }
     
-    
     private void Win()
     {
-        Debug.Log("Win!");
+        EventManager.Instance.InvokeOnWinActions();
     }
 
     private void Draw()
     {
-        Debug.Log("Draw!");
+        EventManager.Instance.InvokeOnDrawActoins();
     }
 
-    private void Lose()
+    private void Loss()
     {
-        Debug.Log("Lost!");
+        EventManager.Instance.InvokeOnLossActoins();
     }
 
     private HandType GetHandType(GameObject obj)
