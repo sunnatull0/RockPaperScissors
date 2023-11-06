@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class MainHand : BaseHand
 {
-
+    
+    private Transform myTransform;
+    private Transform _otherTransform;
     private HandType myType;
+
 
     private void Awake()
     {
@@ -14,14 +17,28 @@ public class MainHand : BaseHand
         myType = GetHandType(gameObject);
     }
 
+    private void Start()
+    {
+        myTransform = transform;
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Assigning the transform that hit this object
+        _otherTransform = collision.transform;
+        
+        // Getting the type of interracted hand.
         HandType otherType = GetHandType(collision.gameObject);
+
+        // Interacting with other hand
         HandleInteraction(myType, otherType);
     }
 
+
+
     private void HandleInteraction(HandType myType, HandType InterractedType)
     {
+        // Checking all possible cases.
         switch (myType, InterractedType)
         {
             // Rock check.
@@ -61,19 +78,23 @@ public class MainHand : BaseHand
     
     private void Win()
     {
-        EventManager.Instance.InvokeOnWinActions();
+        // Invoking Win Event.
+        EventManager.Instance.InvokeOnWinActions(myTransform, _otherTransform);
     }
 
     private void Draw()
     {
-        EventManager.Instance.InvokeOnDrawActoins();
+        // Invoking Draw Event.
+        EventManager.Instance.InvokeOnDrawActoins(myTransform, _otherTransform);
     }
 
     private void Loss()
     {
-        EventManager.Instance.InvokeOnLossActoins();
+        // Invoking Loss Event.
+        EventManager.Instance.InvokeOnLossActoins(myTransform, _otherTransform);
     }
 
+    // Function to get the HandType of some Gameobject.
     private HandType GetHandType(GameObject obj)
     {
         HandType handType = obj.GetComponent<BaseHand>().type;

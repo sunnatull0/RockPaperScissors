@@ -5,22 +5,31 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // Singleton.
     public static GameManager Instance { get; private set; }
 
 
-    // Variables.
-
-    // Right hand.
+    [Header("RIGHT HANDS")]
     [SerializeField] private List<GameObject> mainRightHands;
     private int activeRightHandID;
 
-    // Left hand.
+    [Header("LEFT HANDS")]
     [SerializeField] private List<GameObject> mainLeftHands;
     private int activeLeftHandID;
 
 
-    private void OnEnable()
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else Destroy(gameObject);
+
+        ResetAllHands();
+    }
+
+    private void Start()
     {
         EventManager.Instance.OnWin += OnWinActions;
         EventManager.Instance.OnDraw += OnDrawActions;
@@ -34,24 +43,20 @@ public class GameManager : MonoBehaviour
         EventManager.Instance.OnLoss -= OnLossActions;
     }
 
-    private void Awake()
-    {
-        Instance = this;
-        ResetAllHands();
-    }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Y))
         {
             ChangeToNextHand(mainRightHands, ref activeRightHandID);
         }
-        
+
         if (Input.GetKeyDown(KeyCode.T))
         {
             ChangeToNextHand(mainLeftHands, ref activeLeftHandID);
         }
     }
+
+
 
     private void ChangeToNextHand(List<GameObject> mainHands, ref int handID)
     {
@@ -104,19 +109,27 @@ public class GameManager : MonoBehaviour
 
 
     // Event Actions.
-    private void OnWinActions()
+    private void OnWinActions(Transform myTransform, Transform otherTransform)
     {
-        Debug.Log("Win!");
+        Debug.Log($"{myTransform.name} won {otherTransform.name}");
+
+        otherTransform.gameObject.SetActive(false);
     }
 
-    private void OnDrawActions()
+    private void OnDrawActions(Transform myTransform, Transform otherTransform)
     {
-        Debug.Log("Draw!");
+        Debug.Log($"{myTransform.name} hit {otherTransform.name} and it is a draw");
+
+        otherTransform.gameObject.SetActive(false);
     }
 
-    private void OnLossActions()
+    private void OnLossActions(Transform myTransform, Transform otherTransform)
     {
-        Debug.Log("Loss!");
+        Debug.Log($"{myTransform.name} lost to {otherTransform.name}");
+
+        myTransform.gameObject.SetActive(false);
+
+        Debug.Log("YOU LOST");
     }
 
 }
