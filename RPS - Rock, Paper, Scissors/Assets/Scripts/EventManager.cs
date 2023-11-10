@@ -18,26 +18,7 @@ public class EventManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
     }
-
-
-
-    public void InvokeOnWinActions(Transform myTransform, Transform otherTransform)
-    {
-        OnWin?.Invoke(myTransform, otherTransform);
-    }
-
-    public void InvokeOnDrawActoins(Transform myTransform, Transform otherTransform)
-    {
-        OnDraw?.Invoke(myTransform, otherTransform);
-    }
-
-    public void InvokeOnLossActoins(Transform myTransform, Transform otherTransform)
-    {
-        OnLoss?.Invoke(myTransform, otherTransform);
-    }
-
 }

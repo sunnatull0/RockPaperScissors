@@ -6,14 +6,16 @@ public class HandsManager : MonoBehaviour
 {
     public static HandsManager Instance;
 
-    private List<GameObject> handsPool;
     [SerializeField] private List<GameObject> hands;
     [SerializeField] private int amountToPool;
 
     [Space(10f)]
     [SerializeField] private List<Transform> spawnPositions;
+    [SerializeField] private float spawnSpeed;
 
-    [SerializeField] private bool isRunning;
+    private List<GameObject> handsPool;
+    public static int Health;
+    public int defaultHealth;
 
 
     private void Awake()
@@ -21,19 +23,30 @@ public class HandsManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
     }
 
     private void Start()
     {
+        Health = defaultHealth;
         CreatePoolObjects();
-        SetRunningGame(true);
-        InvokeRepeating(nameof(HandleHands), 2f, 2f);
+        InvokeRepeating(nameof(ActivatePooledObject), 2f, spawnSpeed);
+
+        // Events
+        EventManager.Instance.OnDraw += MinusHealth;
+        EventManager.Instance.OnLoss += (Transform tr, Transform tr2) => { GameManager.Instance.IsGameActive = false; };
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Instance.OnDraw -= MinusHealth;
+        EventManager.Instance.OnLoss -= (Transform tr, Transform tr2) => { };
     }
 
 
+
+    // Object Pooling.
     private void CreatePoolObjects()
     {
         handsPool = new List<GameObject>();
@@ -48,16 +61,11 @@ public class HandsManager : MonoBehaviour
         }
     }
 
-    private void HandleHands()
-    {
-        while (isRunning)
-        {
-            ActivatePooledObject();
-        }
-    }
-
     private void ActivatePooledObject()
     {
+        if (!GameManager.Instance.IsGameActive)
+            return;
+
         GameObject obj = GetPoolObject();
 
         if (obj != null)
@@ -103,10 +111,21 @@ public class HandsManager : MonoBehaviour
         return false;
     }
 
-    private bool SetRunningGame(bool value)
+
+    // Hands Health
+    private void MinusHealth(Transform transform, Transform transform2)
     {
-        isRunning = value;
-        return isRunning;
+        Health--;
+        UpdateHealth();
+    }
+
+    private void UpdateHealth()
+    {
+        if(Health <= 0)
+        {
+            GameManager.Instance.IsGameActive = false;
+            Debug.Log("Over!");
+        }
     }
 
 }

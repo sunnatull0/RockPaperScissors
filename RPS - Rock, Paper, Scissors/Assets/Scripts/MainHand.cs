@@ -7,7 +7,7 @@ public class MainHand : BaseHand
 {
     
     private Transform myTransform;
-    private Transform _otherTransform;
+    private Transform otherTransform;
     private HandType myType;
 
 
@@ -25,7 +25,7 @@ public class MainHand : BaseHand
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // Assigning the transform that hit this object
-        _otherTransform = collision.transform;
+        otherTransform = collision.transform;
         
         // Getting the type of interracted hand.
         HandType otherType = GetHandType(collision.gameObject);
@@ -33,7 +33,6 @@ public class MainHand : BaseHand
         // Interacting with other hand
         HandleInteraction(myType, otherType);
     }
-
 
 
     private void HandleInteraction(HandType myType, HandType InterractedType)
@@ -79,19 +78,19 @@ public class MainHand : BaseHand
     private void Win()
     {
         // Invoking Win Event.
-        EventManager.Instance.InvokeOnWinActions(myTransform, _otherTransform);
+        EventManager.Instance.OnWin?.Invoke(myTransform, otherTransform);
     }
 
     private void Draw()
     {
         // Invoking Draw Event.
-        EventManager.Instance.InvokeOnDrawActoins(myTransform, _otherTransform);
+        EventManager.Instance.OnDraw?.Invoke(myTransform, otherTransform);
     }
 
     private void Loss()
     {
         // Invoking Loss Event.
-        EventManager.Instance.InvokeOnLossActoins(myTransform, _otherTransform);
+        EventManager.Instance.OnLoss?.Invoke(myTransform, otherTransform);
     }
 
     // Function to get the HandType of some Gameobject.

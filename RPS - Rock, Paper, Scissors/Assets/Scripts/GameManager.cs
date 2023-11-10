@@ -16,13 +16,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<GameObject> mainLeftHands;
     private int activeLeftHandID;
 
+    private bool isGameActive = false;
+    public bool IsGameActive { get { return isGameActive; } set { isGameActive = value; } }
+
 
     private void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else Destroy(gameObject);
 
@@ -31,6 +33,9 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        isGameActive = true;
+
+        // Events
         EventManager.Instance.OnWin += OnWinActions;
         EventManager.Instance.OnDraw += OnDrawActions;
         EventManager.Instance.OnLoss += OnLossActions;
@@ -45,12 +50,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.Y) && IsGameActive)
         {
             ChangeToNextHand(mainRightHands, ref activeRightHandID);
         }
 
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T) && IsGameActive)
         {
             ChangeToNextHand(mainLeftHands, ref activeLeftHandID);
         }
@@ -111,25 +116,17 @@ public class GameManager : MonoBehaviour
     // Event Actions.
     private void OnWinActions(Transform myTransform, Transform otherTransform)
     {
-        Debug.Log($"{myTransform.name} won {otherTransform.name}");
-
         otherTransform.gameObject.SetActive(false);
     }
 
     private void OnDrawActions(Transform myTransform, Transform otherTransform)
     {
-        Debug.Log($"{myTransform.name} hit {otherTransform.name} and it is a draw");
-
         otherTransform.gameObject.SetActive(false);
     }
 
     private void OnLossActions(Transform myTransform, Transform otherTransform)
     {
-        Debug.Log($"{myTransform.name} lost to {otherTransform.name}");
-
-        myTransform.gameObject.SetActive(false);
-
-        Debug.Log("YOU LOST");
+        //myTransform.gameObject.SetActive(false);
+        Debug.Log("Game Over!");
     }
-
 }
