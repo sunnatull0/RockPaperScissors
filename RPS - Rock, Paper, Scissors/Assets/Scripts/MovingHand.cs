@@ -3,7 +3,7 @@ using UnityEngine;
 public class MovingHand : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private float defaultSpeed = 50f;
+    private float defaultSpeed = 70f;
     private static float speed;
 
     private void Awake()

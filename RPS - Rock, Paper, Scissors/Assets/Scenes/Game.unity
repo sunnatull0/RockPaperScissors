@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 158005151}
   - component: {fileID: 158005152}
   m_Layer: 0
-  m_Name: UIManager
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healthBar: {fileID: 420048223}
+  healthChangeSpeed: 8
 --- !u!1 &207758495
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +199,7 @@ Transform:
   m_GameObject: {fileID: 207758495}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: 6, z: 0}
+  m_LocalPosition: {x: 5, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -427,6 +428,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   handSprite: {fileID: 0}
+--- !u!1 &375155256
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 375155257}
+  - component: {fileID: 375155258}
+  m_Layer: 0
+  m_Name: Health
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &375155257
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375155256}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1600188569}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &375155258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 375155256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9eda2dbf75fca43bcebca8064100a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultHealth: 3
 --- !u!1 &385570075
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,7 +660,7 @@ GameObject:
   - component: {fileID: 503532444}
   - component: {fileID: 503532443}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: Game
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -632,14 +678,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b019d87c176539d45975ac43d63ec940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainRightHands:
-  - {fileID: 148302079}
-  - {fileID: 584752398}
-  - {fileID: 371033786}
-  mainLeftHands:
-  - {fileID: 303087145}
-  - {fileID: 1803247857}
-  - {fileID: 1929707514}
 --- !u!4 &503532444
 Transform:
   m_ObjectHideFlags: 0
@@ -797,7 +835,7 @@ GameObject:
   - component: {fileID: 957394499}
   - component: {fileID: 957394500}
   m_Layer: 0
-  m_Name: HandsManager
+  m_Name: Hands
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -830,6 +868,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15db88774c52e3a41a0830b281bec3b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainRightHands:
+  - {fileID: 148302079}
+  - {fileID: 584752398}
+  - {fileID: 371033786}
+  mainLeftHands:
+  - {fileID: 303087145}
+  - {fileID: 1803247857}
+  - {fileID: 1929707514}
   hands:
   - {fileID: 2408149160675424344, guid: 49b7dff04226ee149a28f7e92123e16a, type: 3}
   - {fileID: 2408149160675424344, guid: ea5c2c824a039e74ca2e74725a8589a9, type: 3}
@@ -839,7 +885,6 @@ MonoBehaviour:
   - {fileID: 1180489685}
   - {fileID: 207758496}
   spawnSpeed: 4
-  defaultHealth: 3
 --- !u!1001 &1016111354
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1055,7 +1100,7 @@ Transform:
   m_GameObject: {fileID: 1180489684}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 6, z: 0}
+  m_LocalPosition: {x: -5, y: 6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1328,6 +1373,7 @@ Transform:
   - {fileID: 1766679617}
   - {fileID: 957394499}
   - {fileID: 158005151}
+  - {fileID: 375155257}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1766679615
@@ -1341,7 +1387,7 @@ GameObject:
   - component: {fileID: 1766679617}
   - component: {fileID: 1766679616}
   m_Layer: 0
-  m_Name: EventManager
+  m_Name: Events
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

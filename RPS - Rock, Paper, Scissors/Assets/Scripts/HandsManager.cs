@@ -6,16 +6,25 @@ public class HandsManager : MonoBehaviour
 {
     public static HandsManager Instance;
 
+    // Hands Manage variables.
+    [Header("RIGHT HANDS")]
+    [SerializeField] private List<GameObject> mainRightHands;
+    private int activeRightHandID;
+
+    [Header("LEFT HANDS")]
+    [SerializeField] private List<GameObject> mainLeftHands;
+    private int activeLeftHandID;
+
+
+    // Object Pooling variables.
     [SerializeField] private List<GameObject> hands;
     [SerializeField] private int amountToPool;
 
     [Space(10f)]
+
     [SerializeField] private List<Transform> spawnPositions;
     [SerializeField] private float spawnSpeed;
-
     private List<GameObject> handsPool;
-    public static int Health;
-    public int defaultHealth;
 
 
     private void Awake()
@@ -25,24 +34,80 @@ public class HandsManager : MonoBehaviour
             Instance = this;
         }
         else Destroy(gameObject);
+
+        ResetAllHands();
     }
 
     private void Start()
     {
-        Health = defaultHealth;
         CreatePoolObjects();
-        InvokeRepeating(nameof(ActivatePooledObject), 2f, spawnSpeed);
-
-        // Events
-        EventManager.Instance.OnDraw += MinusHealth;
-        EventManager.Instance.OnLoss += (Transform tr, Transform tr2) => { GameManager.Instance.IsGameActive = false; };
+        InvokeRepeating(nameof(ActivatePooledObject), 2f, spawnSpeed); 
     }
 
-    private void OnDisable()
+    private void Update()
     {
-        EventManager.Instance.OnDraw -= MinusHealth;
-        EventManager.Instance.OnLoss -= (Transform tr, Transform tr2) => { };
+        if (Input.GetKeyDown(KeyCode.Y) && GameManager.Instance.IsGameActive)
+        {
+            ChangeToNextHand(mainRightHands, ref activeRightHandID);
+        }
+
+        if (Input.GetKeyDown(KeyCode.T) && GameManager.Instance.IsGameActive)
+        {
+            ChangeToNextHand(mainLeftHands, ref activeLeftHandID);
+        }
     }
+
+
+    // Hands Managing
+    private void ChangeToNextHand(List<GameObject> mainHands, ref int handID)
+    {
+        HideCurrentHand(mainHands, ref handID);
+        ShowNextHand(mainHands, ref handID);
+    }
+
+    private void HideCurrentHand(List<GameObject> mainHands, ref int handID)
+    {
+        // Deactivating current hand.
+        mainHands[handID].SetActive(false);
+    }
+
+    private void ShowNextHand(List<GameObject> mainHands, ref int handID)
+    {
+        // Moving to the next hand.
+        handID++;
+
+        // Reseting handID if it is out of bounds.
+        if (handID >= mainHands.Count)
+            handID = 0;
+
+        // Activating the next hand.
+        mainHands[handID].SetActive(true);
+    }
+
+    private void ResetAllHands()
+    {
+        // Deactivating all right hands.
+        foreach (var hand in mainRightHands)
+        {
+            hand.SetActive(false);
+        }
+
+        // Activating the first right hand.
+        mainRightHands[0].SetActive(true);
+        activeRightHandID = 0;
+
+
+        // Deactivating all left hands.
+        foreach (var hand in mainLeftHands)
+        {
+            hand.SetActive(false);
+        }
+
+        // Activating the first left hand.
+        mainLeftHands[0].SetActive(true);
+        activeLeftHandID = 0;
+    }
+
 
 
 
@@ -109,23 +174,6 @@ public class HandsManager : MonoBehaviour
                 return true;
         }
         return false;
-    }
-
-
-    // Hands Health
-    private void MinusHealth(Transform transform, Transform transform2)
-    {
-        Health--;
-        UpdateHealth();
-    }
-
-    private void UpdateHealth()
-    {
-        if(Health <= 0)
-        {
-            GameManager.Instance.IsGameActive = false;
-            Debug.Log("Over!");
-        }
     }
 
 }
