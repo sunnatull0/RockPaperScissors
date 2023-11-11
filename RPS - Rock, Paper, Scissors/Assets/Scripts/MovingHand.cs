@@ -9,10 +9,6 @@ public class MovingHand : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-    }
-
-    private void Start()
-    {
         speed = defaultSpeed;
     }
 
@@ -24,8 +20,10 @@ public class MovingHand : MonoBehaviour
             gameObject.SetActive(false);
     }
 
+
     private void Move()
     {
         rb.velocity = Vector2.down * speed * Time.deltaTime;
     }
+
 }

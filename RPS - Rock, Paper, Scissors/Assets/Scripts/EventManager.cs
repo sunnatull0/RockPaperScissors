@@ -12,6 +12,8 @@ public class EventManager : MonoBehaviour
     public Action<Transform, Transform> OnDraw;
     public Action<Transform, Transform> OnLoss;
 
+    public Action OnStateChanged;
+
 
     private void Awake()
     {

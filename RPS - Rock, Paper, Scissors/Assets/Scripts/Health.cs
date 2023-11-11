@@ -42,8 +42,8 @@ public class Health : MonoBehaviour
     {
         if (_Health <= 0)
         {
-            GameManager.Instance.IsGameActive = false;
-            Debug.Log("Over!");
+            _Health = 0;
+            GameManager.Instance.state = GameManager.State.GameOver;
         }
     }
 

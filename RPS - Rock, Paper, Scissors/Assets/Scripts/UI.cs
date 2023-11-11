@@ -3,16 +3,26 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UI : MonoBehaviour
 {
     public static UI Instance;
 
+    [Header("Health")]
+    [SerializeField] private GameObject healthParent;
     [SerializeField] private Image healthBar;
+    [SerializeField] private float healthChangeSpeed;
     private float currentValue;
     private float targetValue;
 
-    [SerializeField] private float healthChangeSpeed;
+    [Header("CountDown")]
+    [SerializeField] private GameObject countDownParent;
+    [SerializeField] private TMP_Text countText;
+
+    [Header("GameOver")]
+    [SerializeField] private GameObject gameOverParent;
+
 
     private void Awake()
     {
@@ -26,18 +36,22 @@ public class UI : MonoBehaviour
     private void Start()
     {
         currentValue = Health._Health;
-        
+
         // Event subscribing.
         EventManager.Instance.OnDraw += UpdateHealthBar;
+        EventManager.Instance.OnStateChanged += OnStateChangedActions;
     }
 
     private void OnDisable()
     {
         // Event unsubscribing.
         EventManager.Instance.OnDraw -= UpdateHealthBar;
+        EventManager.Instance.OnStateChanged -= OnStateChangedActions;
     }
 
-    public void UpdateHealthBar(Transform myTransform, Transform otherTransform)
+
+    // Health.
+    private void UpdateHealthBar(Transform myTransform, Transform otherTransform)
     {
         currentValue = (float)Health._Health / Health.Instance.defaultHealth;
 
@@ -45,7 +59,6 @@ public class UI : MonoBehaviour
         StartCoroutine(UpdateBarAfterDelay());
     }
 
-    
     private IEnumerator UpdateBarAfterDelay()
     {
         yield return null;
@@ -71,5 +84,35 @@ public class UI : MonoBehaviour
 
         healthBar.fillAmount = currentValue;
     }
+
+
+
+    // UI handling depending on state.
+    private void OnStateChangedActions()
+    {
+        // Handle UI when Game is countingDown.
+        if (GameManager.Instance.IsCountingDown)
+            Show(countDownParent);
+        else
+            Hide(countDownParent);
+
+
+        // Handle UI when Game is playing.
+        if (GameManager.Instance.IsGameActive)
+            Show(healthParent);
+        else
+            Hide(healthParent);
+
+
+        // Handle UI when Game is over.
+        if (GameManager.Instance.isGameOver)
+            Show(gameOverParent);
+        else
+            Hide(gameOverParent);
+    }
+
+    private void Show(GameObject obj) => obj.SetActive(true);
+
+    private void Hide(GameObject obj) => obj.SetActive(false);
 
 }
