@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -36,6 +34,9 @@ public class UI : MonoBehaviour
     private void Start()
     {
         currentValue = Health._Health;
+        Hide(countDownParent);
+        Hide(gameOverParent);
+        Hide(healthParent);
 
         // Event subscribing.
         EventManager.Instance.OnDraw += UpdateHealthBar;
@@ -47,6 +48,11 @@ public class UI : MonoBehaviour
         // Event unsubscribing.
         EventManager.Instance.OnDraw -= UpdateHealthBar;
         EventManager.Instance.OnStateChanged -= OnStateChangedActions;
+    }
+
+    private void Update()
+    {
+        countText.text = Mathf.Ceil(GameManager.Instance.GetCountDownTimer()).ToString();
     }
 
 

@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
 
     public enum State
     {
-        WaitingToStart, CountingDown, Playing, GameOver,
+        CountingDown, Playing, GameOver,
     }
     public State state;
 
@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour
     public bool IsGameActive { get { return state == State.Playing; } private set { } }
     public bool isGameOver { get { return state == State.GameOver; } private set { } }
 
-    [SerializeField] private float waitingToStart = 0.5f;
     [SerializeField] private float countDownTimer = 3f;
 
 
@@ -25,7 +24,7 @@ public class GameManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        state = State.WaitingToStart;
+        state = State.CountingDown;
     }
 
     private void Start()
@@ -48,14 +47,6 @@ public class GameManager : MonoBehaviour
     {
         switch (state)
         {
-            case State.WaitingToStart:
-                EventManager.Instance.OnStateChanged?.Invoke();
-
-                waitingToStart -= Time.deltaTime;
-                if (waitingToStart <= 0f)
-                    state = State.CountingDown;
-                break;
-
             case State.CountingDown:
                 EventManager.Instance.OnStateChanged?.Invoke();
 
@@ -72,6 +63,11 @@ public class GameManager : MonoBehaviour
                 EventManager.Instance.OnStateChanged?.Invoke();
                 break;
         }
+    }
+
+    public float GetCountDownTimer()
+    {
+        return countDownTimer;
     }
 
 

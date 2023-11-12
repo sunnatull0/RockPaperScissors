@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Effects : MonoBehaviour
+public class EffectsManager : MonoBehaviour
 {
-    public static Effects Instance { get; private set; }
+    public static EffectsManager Instance { get; private set; }
 
     private void Awake()
     {
