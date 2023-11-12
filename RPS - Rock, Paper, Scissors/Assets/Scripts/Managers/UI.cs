@@ -14,9 +14,15 @@ public class UI : MonoBehaviour
     private float currentValue;
     private float targetValue;
 
+    [Header("WaitingToStart")]
+    [SerializeField] private GameObject waitingParent;
+
     [Header("CountDown")]
     [SerializeField] private GameObject countDownParent;
     [SerializeField] private TMP_Text countText;
+
+    [Header("Playing")]
+    [SerializeField] private GameObject startPlayingParent;
 
     [Header("GameOver")]
     [SerializeField] private GameObject gameOverParent;
@@ -33,10 +39,10 @@ public class UI : MonoBehaviour
 
     private void Start()
     {
+        HideAll();
+        Show(waitingParent);
+        
         currentValue = Health._Health;
-        Hide(countDownParent);
-        Hide(gameOverParent);
-        Hide(healthParent);
 
         // Event subscribing.
         EventManager.Instance.OnDraw += UpdateHealthBar;
@@ -96,6 +102,12 @@ public class UI : MonoBehaviour
     // UI handling depending on state.
     private void OnStateChangedActions()
     {
+        // Handle UI when Game is waiting to start.
+        if (GameManager.Instance.IsWaiting)
+            Show(waitingParent);
+        else
+            Hide(waitingParent);
+
         // Handle UI when Game is countingDown.
         if (GameManager.Instance.IsCountingDown)
             Show(countDownParent);
@@ -105,9 +117,15 @@ public class UI : MonoBehaviour
 
         // Handle UI when Game is playing.
         if (GameManager.Instance.IsGameActive)
+        {
             Show(healthParent);
+            Show(startPlayingParent);
+        }
         else
+        {
             Hide(healthParent);
+            Hide(startPlayingParent);
+        }
 
 
         // Handle UI when Game is over.
@@ -120,5 +138,15 @@ public class UI : MonoBehaviour
     private void Show(GameObject obj) => obj.SetActive(true);
 
     private void Hide(GameObject obj) => obj.SetActive(false);
+
+
+    private void HideAll()
+    {
+        Hide(healthParent);
+        Hide(waitingParent);
+        Hide(countDownParent);
+        Hide(startPlayingParent);
+        Hide(gameOverParent);
+    }
 
 }

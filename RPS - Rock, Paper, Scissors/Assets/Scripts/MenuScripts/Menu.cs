@@ -7,9 +7,5 @@ using UnityEngine.UI;
 public class Menu : MonoBehaviour
 {
     
-    public void PlayButton()
-    {
-        SceneManager.LoadScene(1);
-    }
 
 }
