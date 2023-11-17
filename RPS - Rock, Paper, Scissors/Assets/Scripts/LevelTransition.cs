@@ -6,15 +6,16 @@ using UnityEngine.SceneManagement;
 public class LevelTransition : MonoBehaviour
 {
     [SerializeField] private Animator animator;
-    private const string toBlack = "toBlack";
+    private const string toGame = "toGame";
+    private const string toMenu = "toMenu";
 
-    public void LoadScene()
+    public void ToGame() => animator.SetTrigger(toGame);
+
+    public void ToMenu() => animator.SetTrigger(toMenu);
+
+    public void LoadScene(int index)
     {
-        animator.SetTrigger(toBlack);
+        SceneManager.LoadScene(index);
     }
 
-    public void NextLevel()
-    {
-        SceneManager.LoadScene(1);
-    }
 }

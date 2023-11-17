@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7032664607557473693}
   - component: {fileID: 6764303797235285058}
   - component: {fileID: -1348632025735756502}
+  - component: {fileID: 4190748523053738901}
   m_Layer: 0
   m_Name: Paper
   m_TagString: Untagged
@@ -124,7 +125,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4178410c4fa4c4445b483e8c40fd97d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 50
+--- !u!95 &4190748523053738901
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408149160675424344}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fccb18855f0c38841b3ea09abd86cc8f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8396253097728245198
 GameObject:
   m_ObjectHideFlags: 0
