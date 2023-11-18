@@ -1,2 +1,2 @@
 # RockPaperScissors
-2D Unity game about RockPaperScissors...
+2D Game. RockPaperScissors
