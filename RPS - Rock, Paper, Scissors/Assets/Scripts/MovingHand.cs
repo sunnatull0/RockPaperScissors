@@ -3,13 +3,18 @@ using UnityEngine;
 public class MovingHand : MonoBehaviour
 {
     private Rigidbody2D rb;
-    private float defaultSpeed = 70f;
-    private static float speed;
+    private float minSpeed = 70f;
+    private float maxSpeed = 100f;
+    private float speed;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        speed = defaultSpeed;
+    }
+
+    private void OnEnable()
+    {
+        speed = GenerateRandomSpeed();
     }
 
     private void Update()
@@ -20,10 +25,14 @@ public class MovingHand : MonoBehaviour
             gameObject.SetActive(false);
     }
 
-
     private void Move()
     {
         rb.velocity = Vector2.down * speed * Time.deltaTime;
+    }
+
+    private float GenerateRandomSpeed()
+    {
+        return Random.Range(minSpeed, maxSpeed);
     }
 
 }

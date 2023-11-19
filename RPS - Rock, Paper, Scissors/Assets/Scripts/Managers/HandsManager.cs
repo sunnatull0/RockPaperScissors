@@ -5,6 +5,7 @@ public class HandsManager : MonoBehaviour
 {
     public static HandsManager Instance;
 
+    #region Hands Manage Variables.
     // Hands Manage variables.
     [Header("RIGHT HANDS")]
     [SerializeField] private List<GameObject> mainRightHands;
@@ -13,8 +14,9 @@ public class HandsManager : MonoBehaviour
     [Header("LEFT HANDS")]
     [SerializeField] private List<GameObject> mainLeftHands;
     private int activeLeftHandID;
+    #endregion
 
-
+    #region Object Pooling Variables.
     // Object Pooling variables.
     [SerializeField] private List<GameObject> hands;
     [SerializeField] private int amountToPool;
@@ -22,9 +24,17 @@ public class HandsManager : MonoBehaviour
     [Space(10f)]
 
     [SerializeField] private List<Transform> spawnPositions;
-    [SerializeField] private float spawnSpeed;
     private List<GameObject> handsPool;
 
+    // SpawnSpeed
+    private float spawnSpeed = 1f;
+
+    [Range(0.2f, 2f)]
+    [SerializeField] private float minSpeed;
+
+    [Range(0.2f, 2f)]
+    [SerializeField] private float maxSpeed;
+    #endregion
 
     private void Awake()
     {
@@ -40,20 +50,25 @@ public class HandsManager : MonoBehaviour
     private void Start()
     {
         CreatePoolObjects();
-        InvokeRepeating(nameof(ActivatePooledObject), 2f, spawnSpeed); 
+        GenerateRandomSpeed();
+        InvokeRepeating(nameof(ActivatePooledObject), 2f, spawnSpeed);        
     }
+
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Y) && GameManager.Instance.IsGameActive)
         {
             ChangeToNextHand(mainRightHands, ref activeRightHandID);
+            EventManager.Instance.OnHandChange?.Invoke(mainRightHands[0].transform);
         }
 
         if (Input.GetKeyDown(KeyCode.T) && GameManager.Instance.IsGameActive)
         {
             ChangeToNextHand(mainLeftHands, ref activeLeftHandID);
+            EventManager.Instance.OnHandChange?.Invoke(mainLeftHands[0].transform);
         }
+
     }
 
 
@@ -107,9 +122,14 @@ public class HandsManager : MonoBehaviour
         activeLeftHandID = 0;
     }
 
+    private void GenerateRandomSpeed()
+    {
+        spawnSpeed = Random.Range(minSpeed, maxSpeed);
+    }
 
 
 
+    #region Object Pooling
     // Object Pooling.
     private void CreatePoolObjects()
     {
@@ -118,7 +138,7 @@ public class HandsManager : MonoBehaviour
         {
             for (int j = 0; j < hands.Count; j++)
             {
-                GameObject hand = Instantiate(hands[j]);
+                GameObject hand = Instantiate(hands[j], GameManager.Instance.InGameCreatedObjects);
                 handsPool.Add(hand);
                 hand.SetActive(false);
             }
@@ -129,6 +149,8 @@ public class HandsManager : MonoBehaviour
     {
         if (!GameManager.Instance.IsGameActive)
             return;
+
+        GenerateRandomSpeed();
 
         GameObject obj = GetPoolObject();
 
@@ -174,5 +196,5 @@ public class HandsManager : MonoBehaviour
         }
         return false;
     }
-
+    #endregion
 }

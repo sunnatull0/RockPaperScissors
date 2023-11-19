@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float waitingToStart = 0.5f;
     [SerializeField] private float countDownTimer = 3f;
 
+    // This transform will be used as a Parent for all instantiated objects during the game.
+    [SerializeField] public Transform InGameCreatedObjects;
 
     private void Awake()
     {

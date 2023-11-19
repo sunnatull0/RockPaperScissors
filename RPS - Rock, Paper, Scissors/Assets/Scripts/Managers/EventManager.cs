@@ -14,6 +14,8 @@ public class EventManager : MonoBehaviour
 
     public Action OnStateChanged;
 
+    public Action<Transform> OnHandChange;
+
 
     private void Awake()
     {
