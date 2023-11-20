@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Health : MonoBehaviour
@@ -31,7 +29,6 @@ public class Health : MonoBehaviour
     }
 
 
-
     private void MinusHealth(Transform transform, Transform transform2)
     {
         _Health--;
@@ -43,7 +40,7 @@ public class Health : MonoBehaviour
         if (_Health <= 0)
         {
             _Health = 0;
-            GameManager.Instance.state = GameManager.State.GameOver;
+            EventManager.Instance.OnLoss?.Invoke(transform, transform);
         }
     }
 

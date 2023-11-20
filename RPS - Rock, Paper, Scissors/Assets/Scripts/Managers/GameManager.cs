@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,11 +16,13 @@ public class GameManager : MonoBehaviour
     public bool IsGameActive { get { return state == State.Playing; } private set { } }
     public bool isGameOver { get { return state == State.GameOver; } private set { } }
 
+
     [SerializeField] private float waitingToStart = 0.5f;
     [SerializeField] private float countDownTimer = 3f;
 
     // This transform will be used as a Parent for all instantiated objects during the game.
     [SerializeField] public Transform InGameCreatedObjects;
+
 
     private void Awake()
     {
@@ -84,19 +85,14 @@ public class GameManager : MonoBehaviour
                 break;
 
             case State.GameOver:
-                EventManager.Instance.OnStateChanged?.Invoke();
+
                 break;
         }
     }
 
+
     public float GetCountDownTimer()
     {
         return countDownTimer;
-    }
-
-
-    public void GameOverButton()
-    {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

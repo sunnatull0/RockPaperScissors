@@ -57,13 +57,13 @@ public class HandsManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Y) && GameManager.Instance.IsGameActive)
+        if (Input.GetMouseButtonDown(1) && GameManager.Instance.IsGameActive)
         {
             ChangeToNextHand(mainRightHands, ref activeRightHandID);
             EventManager.Instance.OnHandChange?.Invoke(mainRightHands[0].transform);
         }
 
-        if (Input.GetKeyDown(KeyCode.T) && GameManager.Instance.IsGameActive)
+        if (Input.GetMouseButtonDown(0) && GameManager.Instance.IsGameActive)
         {
             ChangeToNextHand(mainLeftHands, ref activeLeftHandID);
             EventManager.Instance.OnHandChange?.Invoke(mainLeftHands[0].transform);
@@ -71,7 +71,7 @@ public class HandsManager : MonoBehaviour
 
     }
 
-
+    #region Hands Managing
     // Hands Managing
     private void ChangeToNextHand(List<GameObject> mainHands, ref int handID)
     {
@@ -126,7 +126,7 @@ public class HandsManager : MonoBehaviour
     {
         spawnSpeed = Random.Range(minSpeed, maxSpeed);
     }
-
+    #endregion
 
 
     #region Object Pooling

@@ -11,9 +11,7 @@ public class LevelTransition : MonoBehaviour
 
     public void ToMenu() => animator.SetTrigger(toMenu);
 
-    public void LoadScene(int index)
-    {
-        SceneManager.LoadScene(index);
-    }
+    public void LoadScene(int index) => SceneManager.LoadScene(index);
+
 
 }
