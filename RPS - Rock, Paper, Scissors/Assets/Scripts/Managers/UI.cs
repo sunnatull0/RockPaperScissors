@@ -23,6 +23,8 @@ public class UI : MonoBehaviour
 
     [Header("Playing")]
     [SerializeField] private GameObject startPlayingParent;
+    [SerializeField] private GameObject winEffect;
+    [SerializeField] private GameObject drawEffect;
 
     [Header("GameOver")]
     [SerializeField] private GameObject gameOverParent;
@@ -134,6 +136,7 @@ public class UI : MonoBehaviour
         else
             Hide(gameOverParent);
     }
+
 
     private void Show(GameObject obj) => obj.SetActive(true);
 

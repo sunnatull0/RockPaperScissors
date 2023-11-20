@@ -15,11 +15,15 @@ public class AnimationManager : MonoBehaviour
 
     private void Start()
     {
+        EventManager.Instance.OnWin += (Transform myTr, Transform otherTr) => { UIanimator.SetTrigger(Win); };
+        EventManager.Instance.OnDraw += (Transform myTr, Transform otherTr) => { UIanimator.SetTrigger(Draw); };
         EventManager.Instance.OnStateChanged += OnStateChaged;
     }
 
     private void OnDisable()
     {
+        EventManager.Instance.OnWin -= (Transform myTr, Transform otherTr) => { UIanimator.SetTrigger(Win); };
+        EventManager.Instance.OnDraw -= (Transform myTr, Transform otherTr) => { UIanimator.SetTrigger(Draw); };
         EventManager.Instance.OnStateChanged -= OnStateChaged;
     }
 
@@ -27,6 +31,8 @@ public class AnimationManager : MonoBehaviour
     [Header("UI")]
     [SerializeField] private Animator UIanimator;
     private const string GreenPlay = "GreenPlay";
+    private const string Win = "Win";
+    private const string Draw = "Draw";
 
     private void OnStateChaged()
     {
