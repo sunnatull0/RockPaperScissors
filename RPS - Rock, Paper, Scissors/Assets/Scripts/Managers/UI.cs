@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UI : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class UI : MonoBehaviour
     [SerializeField] private float healthChangeSpeed;
     private float currentValue;
     private float targetValue;
+
+    [Header("Score")]
+    [SerializeField] private GameObject scoreParent;
+    [SerializeField] private TMP_Text scoreText;
 
     [Header("WaitingToStart")]
     [SerializeField] private GameObject waitingParent;
@@ -43,10 +48,12 @@ public class UI : MonoBehaviour
     {
         HideAll();
         Show(waitingParent);
-        
+
         currentValue = Health._Health;
+        StartCoroutine(UpdateScoreUIAfterDelay());
 
         // Event subscribing.
+        EventManager.Instance.OnWin += UpdateScoreUI;
         EventManager.Instance.OnDraw += UpdateHealthBar;
         EventManager.Instance.OnStateChanged += OnStateChangedActions;
     }
@@ -54,6 +61,7 @@ public class UI : MonoBehaviour
     private void OnDisable()
     {
         // Event unsubscribing.
+        EventManager.Instance.OnWin -= UpdateScoreUI;
         EventManager.Instance.OnDraw -= UpdateHealthBar;
         EventManager.Instance.OnStateChanged -= OnStateChangedActions;
     }
@@ -63,6 +71,21 @@ public class UI : MonoBehaviour
         countText.text = Mathf.Ceil(GameManager.Instance.GetCountDownTimer()).ToString();
     }
 
+    private void PlayAfterDelay(Action action)
+    {
+        StartCoroutine(Test(action));
+    }
+
+    private IEnumerator Test(Action _action)
+    {
+        yield return null;
+        _action();
+    }
+    
+    private void Testing()
+    {
+        Debug.Log("asd");
+    }
 
     // Health.
     private void UpdateHealthBar(Transform myTransform, Transform otherTransform)
@@ -100,6 +123,15 @@ public class UI : MonoBehaviour
     }
 
 
+    // Score.
+    private void UpdateScoreUI(Transform myTransform, Transform otherTransform) => StartCoroutine(UpdateScoreUIAfterDelay());
+
+    private IEnumerator UpdateScoreUIAfterDelay()
+    {
+        yield return null;
+        scoreText.text = ScoreManager.Score.ToString();
+    }
+
 
     // UI handling depending on state.
     private void OnStateChangedActions()
@@ -121,11 +153,13 @@ public class UI : MonoBehaviour
         if (GameManager.Instance.IsGameActive)
         {
             Show(healthParent);
+            Show(scoreParent);
             Show(startPlayingParent);
         }
         else
         {
             Hide(healthParent);
+            Hide(scoreParent);
             Hide(startPlayingParent);
         }
 
@@ -142,10 +176,10 @@ public class UI : MonoBehaviour
 
     private void Hide(GameObject obj) => obj.SetActive(false);
 
-
     private void HideAll()
     {
         Hide(healthParent);
+        Hide(scoreParent);
         Hide(waitingParent);
         Hide(countDownParent);
         Hide(startPlayingParent);
