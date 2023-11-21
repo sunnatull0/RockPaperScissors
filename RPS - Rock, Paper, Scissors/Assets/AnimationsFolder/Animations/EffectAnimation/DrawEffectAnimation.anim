@@ -43,7 +43,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: StateUI/Playing/DrawEffectPanel
+    path: DrawEffectPanel
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -73,7 +73,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Alpha
-    path: StateUI/Playing
+    path: 
     classID: 225
     script: {fileID: 0}
     flags: 0
@@ -86,7 +86,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 2571920229
+      path: 1557496931
       attribute: 2086281974
       script: {fileID: 0}
       typeID: 1
@@ -95,7 +95,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3794562930
+      path: 0
       attribute: 1574349066
       script: {fileID: 0}
       typeID: 225
@@ -151,7 +151,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: StateUI/Playing/DrawEffectPanel
+    path: DrawEffectPanel
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -181,7 +181,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_Alpha
-    path: StateUI/Playing
+    path: 
     classID: 225
     script: {fileID: 0}
     flags: 0

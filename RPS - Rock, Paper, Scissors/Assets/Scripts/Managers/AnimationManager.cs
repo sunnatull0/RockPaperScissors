@@ -1,11 +1,17 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
     public static AnimationManager Instance;
+
+    [Header("UI")]
+    [SerializeField] private Animator UIBasicAnimator;
+    [SerializeField] private Animator UIEffectsAnimator;
+    private const string GreenPlay = "GreenPlay";
+    private const string Win = "Win";
+    private const string Draw = "Draw";
+    private const string Score = "Score";
+
 
     private void Awake()
     {
@@ -15,43 +21,47 @@ public class AnimationManager : MonoBehaviour
 
     private void Start()
     {
-        EventManager.Instance.OnWin += (Transform myTr, Transform otherTr) => { UIanimator.SetTrigger(Win); };
-        EventManager.Instance.OnDraw += (Transform myTr, Transform otherTr) => { UIanimator.SetTrigger(Draw); };
+        EventManager.Instance.OnWin += (Transform myTr, Transform otherTr) =>
+        {
+            UIBasicAnimator.Rebind();
+            UIBasicAnimator.SetTrigger(Score);
+
+            UIEffectsAnimator.Rebind();
+            UIEffectsAnimator.SetTrigger(Win);
+        };
+        EventManager.Instance.OnDraw += (Transform myTr, Transform otherTr) =>
+        {
+            UIEffectsAnimator.Rebind();
+            UIEffectsAnimator.SetTrigger(Draw);
+        };
         EventManager.Instance.OnStateChanged += OnStateChaged;
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.OnWin -= (Transform myTr, Transform otherTr) => { UIanimator.SetTrigger(Win); };
-        EventManager.Instance.OnDraw -= (Transform myTr, Transform otherTr) => { UIanimator.SetTrigger(Draw); };
+        EventManager.Instance.OnWin -= (Transform myTr, Transform otherTr) =>
+        {
+            UIBasicAnimator.Rebind();
+            UIBasicAnimator.SetTrigger(Score);
+
+            UIEffectsAnimator.Rebind();
+            UIEffectsAnimator.SetTrigger(Win);
+        };
+        EventManager.Instance.OnDraw -= (Transform myTr, Transform otherTr) =>
+        {
+            UIEffectsAnimator.Rebind();
+            UIEffectsAnimator.SetTrigger(Draw);
+        };
         EventManager.Instance.OnStateChanged -= OnStateChaged;
     }
 
 
-    [Header("UI")]
-    [SerializeField] private Animator UIanimator;
-    private const string GreenPlay = "GreenPlay";
-    private const string Win = "Win";
-    private const string Draw = "Draw";
-
     private void OnStateChaged()
     {
         if (GameManager.Instance.IsGameActive)
-        {
-            StartCoroutine(PlayWithOneFrameDelay());
-        }
+            GameManager.Instance.PlayAfterDelay(PlayGreenAnimation);
     }
 
-    private void PlayGreenAnimation()
-    {
-        UIanimator.SetTrigger(GreenPlay);
-    }
-
-    private IEnumerator PlayWithOneFrameDelay()
-    {
-        yield return null;
-
-        PlayGreenAnimation();
-    }
+    private void PlayGreenAnimation() => UIEffectsAnimator.SetTrigger(GreenPlay);
 
 }

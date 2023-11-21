@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -94,5 +96,14 @@ public class GameManager : MonoBehaviour
     public float GetCountDownTimer()
     {
         return countDownTimer;
+    }
+
+
+    public void PlayAfterDelay(Action action) => StartCoroutine(Method(action));
+
+    private IEnumerator Method(Action _action)
+    {
+        yield return null;
+        _action();
     }
 }

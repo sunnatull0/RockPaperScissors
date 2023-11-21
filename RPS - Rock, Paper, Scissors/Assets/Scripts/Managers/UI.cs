@@ -37,10 +37,7 @@ public class UI : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
+        if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
 
@@ -50,7 +47,7 @@ public class UI : MonoBehaviour
         Show(waitingParent);
 
         currentValue = Health._Health;
-        StartCoroutine(UpdateScoreUIAfterDelay());
+        UpdateScore();
 
         // Event subscribing.
         EventManager.Instance.OnWin += UpdateScoreUI;
@@ -71,35 +68,18 @@ public class UI : MonoBehaviour
         countText.text = Mathf.Ceil(GameManager.Instance.GetCountDownTimer()).ToString();
     }
 
-    private void PlayAfterDelay(Action action)
-    {
-        StartCoroutine(Test(action));
-    }
-
-    private IEnumerator Test(Action _action)
-    {
-        yield return null;
-        _action();
-    }
-    
-    private void Testing()
-    {
-        Debug.Log("asd");
-    }
 
     // Health.
     private void UpdateHealthBar(Transform myTransform, Transform otherTransform)
     {
         currentValue = (float)Health._Health / Health.Instance.defaultHealth;
 
-        // Update bar after health has been changed
-        StartCoroutine(UpdateBarAfterDelay());
+        // Update bar after health has been changed.
+        GameManager.Instance.PlayAfterDelay(Decrease);
     }
 
-    private IEnumerator UpdateBarAfterDelay()
+    private void Decrease()
     {
-        yield return null;
-
         targetValue = (float)Health._Health / Health.Instance.defaultHealth;
 
         // Decreasing fillAmount smoothly.
@@ -123,14 +103,12 @@ public class UI : MonoBehaviour
     }
 
 
-    // Score.
-    private void UpdateScoreUI(Transform myTransform, Transform otherTransform) => StartCoroutine(UpdateScoreUIAfterDelay());
 
-    private IEnumerator UpdateScoreUIAfterDelay()
-    {
-        yield return null;
-        scoreText.text = ScoreManager.Score.ToString();
-    }
+    // Score.
+    private void UpdateScoreUI(Transform myTransform, Transform otherTransform) => GameManager.Instance.PlayAfterDelay(UpdateScore);
+
+    private void UpdateScore() => scoreText.text = ScoreManager.Score.ToString();
+
 
 
     // UI handling depending on state.
@@ -170,7 +148,6 @@ public class UI : MonoBehaviour
         else
             Hide(gameOverParent);
     }
-
 
     private void Show(GameObject obj) => obj.SetActive(true);
 
