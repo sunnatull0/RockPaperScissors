@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
+    #region Variables.
     public enum State
     {
         WaitingToStart, CountingDown, Playing, GameOver,
@@ -24,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     // This transform will be used as a Parent for all instantiated objects during the game.
     [SerializeField] public Transform InGameCreatedObjects;
-
+    #endregion
 
     private void Awake()
     {
@@ -99,6 +100,7 @@ public class GameManager : MonoBehaviour
     }
 
 
+    // Function for playing a certain method after one frame delay.
     public void PlayAfterDelay(Action action) => StartCoroutine(Method(action));
 
     private IEnumerator Method(Action _action)

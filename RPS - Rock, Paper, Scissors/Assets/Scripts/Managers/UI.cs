@@ -2,12 +2,13 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
 
 public class UI : MonoBehaviour
 {
+    
     public static UI Instance;
 
+    #region Variables.
     [Header("Health")]
     [SerializeField] private GameObject healthParent;
     [SerializeField] private Image healthBar;
@@ -33,6 +34,7 @@ public class UI : MonoBehaviour
 
     [Header("GameOver")]
     [SerializeField] private GameObject gameOverParent;
+    #endregion
 
 
     private void Awake()
@@ -68,7 +70,7 @@ public class UI : MonoBehaviour
         countText.text = Mathf.Ceil(GameManager.Instance.GetCountDownTimer()).ToString();
     }
 
-
+    #region Health Methods.
     // Health.
     private void UpdateHealthBar(Transform myTransform, Transform otherTransform)
     {
@@ -101,16 +103,18 @@ public class UI : MonoBehaviour
 
         healthBar.fillAmount = currentValue;
     }
+    #endregion
 
 
-
+    #region Score Methods.
     // Score.
     private void UpdateScoreUI(Transform myTransform, Transform otherTransform) => GameManager.Instance.PlayAfterDelay(UpdateScore);
 
     private void UpdateScore() => scoreText.text = ScoreManager.Score.ToString();
+    #endregion
 
 
-
+    #region State handling.
     // UI handling depending on state.
     private void OnStateChangedActions()
     {
@@ -162,5 +166,5 @@ public class UI : MonoBehaviour
         Hide(startPlayingParent);
         Hide(gameOverParent);
     }
-
+    #endregion
 }

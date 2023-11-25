@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class MainHand : BaseHand
 {
-    
+
+    #region Variables.
     private Transform myTransform;
     private Transform otherTransform;
     private HandType myType;
-
+    #endregion
 
     private void Awake()
     {

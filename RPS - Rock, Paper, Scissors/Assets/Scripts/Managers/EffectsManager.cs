@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class EffectsManager : MonoBehaviour
 {
     public static EffectsManager Instance { get; private set; }
 
+
+    #region Variables.
     // HandChange effect.
     [SerializeField] private ParticleSystem handChangeEffectPrefab;
     private ParticleSystem handChangeEffect;
@@ -22,7 +21,7 @@ public class EffectsManager : MonoBehaviour
     // Loss effect.
     [SerializeField] private ParticleSystem lossEffectPrefab;
     private ParticleSystem lossEffect;
-
+    #endregion
 
 
     private void Awake()

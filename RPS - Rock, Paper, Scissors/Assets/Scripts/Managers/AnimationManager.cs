@@ -2,15 +2,21 @@ using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
+    
     public static AnimationManager Instance;
 
+    #region Variables.
+    // Animators.
     [Header("UI")]
     [SerializeField] private Animator UIBasicAnimator;
     [SerializeField] private Animator UIEffectsAnimator;
+
+    // Parameter names.
     private const string GreenPlay = "GreenPlay";
     private const string Win = "Win";
     private const string Draw = "Draw";
     private const string Score = "Score";
+    #endregion
 
 
     private void Awake()

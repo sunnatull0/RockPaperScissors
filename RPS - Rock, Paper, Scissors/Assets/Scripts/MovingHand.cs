@@ -2,10 +2,14 @@ using UnityEngine;
 
 public class MovingHand : MonoBehaviour
 {
+
+    #region Variables
     private Rigidbody2D rb;
     private float minSpeed = 70f;
     private float maxSpeed = 100f;
     private float speed;
+    #endregion
+
 
     private void Awake()
     {
@@ -24,6 +28,7 @@ public class MovingHand : MonoBehaviour
         else
             gameObject.SetActive(false);
     }
+
 
     private void Move()
     {
