@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Runtime.CompilerServices;
 
 public class UI : MonoBehaviour
 {
@@ -34,6 +35,8 @@ public class UI : MonoBehaviour
 
     [Header("GameOver")]
     [SerializeField] private GameObject gameOverParent;
+    [SerializeField] private TMP_Text gameOverText;
+    [SerializeField] private string gameOverTitle;
     #endregion
 
 
@@ -120,15 +123,23 @@ public class UI : MonoBehaviour
     {
         // Handle UI when Game is waiting to start.
         if (GameManager.Instance.IsWaiting)
+        {
             Show(waitingParent);
+        }
         else
+        {
             Hide(waitingParent);
+        }
 
         // Handle UI when Game is countingDown.
         if (GameManager.Instance.IsCountingDown)
+        {
             Show(countDownParent);
+        }
         else
+        {
             Hide(countDownParent);
+        }
 
 
         // Handle UI when Game is playing.
@@ -148,9 +159,14 @@ public class UI : MonoBehaviour
 
         // Handle UI when Game is over.
         if (GameManager.Instance.isGameOver)
+        {
             Show(gameOverParent);
+            UpdateGameOverPanel();
+        }
         else
+        {
             Hide(gameOverParent);
+        }
     }
 
     private void Show(GameObject obj) => obj.SetActive(true);
@@ -165,6 +181,31 @@ public class UI : MonoBehaviour
         Hide(countDownParent);
         Hide(startPlayingParent);
         Hide(gameOverParent);
+    }
+    #endregion
+
+    #region GameOver Panel.
+    private void UpdateGameOverPanel()
+    {
+        string title;
+
+        switch (ScoreManager.Score)
+        {
+            case 0:
+                title = "Ooops! No win for you.";
+                break;
+            case 1:
+                title = "Not bad! You defeated only 1 hand.";
+                break;
+            case > 1:
+                title = ScoreManager.Score < 10 ? $"Nice try! You only defeated {ScoreManager.Score} hands." : $"Great! You defeated {ScoreManager.Score} hands.";
+                break;
+            default:
+                title = "Error!";
+                break;
+        }
+
+        gameOverText.text = title;
     }
     #endregion
 }

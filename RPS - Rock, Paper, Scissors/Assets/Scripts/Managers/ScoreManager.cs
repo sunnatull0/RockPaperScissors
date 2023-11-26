@@ -2,18 +2,16 @@ using UnityEngine;
 
 public class ScoreManager : MonoBehaviour
 {
-    public static ScoreManager Instance;
 
     public static int Score;
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        Score = 0;
     }
 
     private void Start()
-    {
+    {   
         // Event subscribing.
         EventManager.Instance.OnWin += (Transform myTransform, Transform otherTransform) => { Score++; };
     }
