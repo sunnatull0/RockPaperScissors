@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 public class UI : MonoBehaviour
 {
-    
+
     public static UI Instance;
 
     #region Variables.
@@ -187,21 +187,31 @@ public class UI : MonoBehaviour
     #region GameOver Panel.
     private void UpdateGameOverPanel()
     {
-        string title;
+        // Variable for GameOver text.
+        string title = "";
 
+        // Changing the variable depending on the Score.
         switch (ScoreManager.Score)
         {
             case 0:
                 title = "Ooops! No win for you.";
                 break;
+
             case 1:
                 title = "Not bad! You defeated only 1 hand.";
                 break;
             case > 1:
-                title = ScoreManager.Score < 10 ? $"Nice try! You only defeated {ScoreManager.Score} hands." : $"Great! You defeated {ScoreManager.Score} hands.";
+
+                if (ScoreManager.Score < 10) title = $"Nice try! You only defeated {ScoreManager.Score} hands.";
+
+                else if (ScoreManager.Score < 20) title = $"Great! You defeated {ScoreManager.Score} hands.";
+
+                else title = $"WOW! You defeated {ScoreManager.Score} hands!!!";
+
                 break;
+
             default:
-                title = "Error!";
+                title = "Oops! Something went wrong.";
                 break;
         }
 

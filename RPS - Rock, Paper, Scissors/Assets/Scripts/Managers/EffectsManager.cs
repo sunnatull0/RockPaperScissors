@@ -9,14 +9,17 @@ public class EffectsManager : MonoBehaviour
     // HandChange effect.
     [SerializeField] private ParticleSystem handChangeEffectPrefab;
     private ParticleSystem handChangeEffect;
+    private ParticleSystem handChangeEffect2;
 
     // Win effect.
     [SerializeField] private ParticleSystem winEffectPrefab;
     private ParticleSystem winEffect;
+    private ParticleSystem winEffect2;
 
     // Draw effect.
     [SerializeField] private ParticleSystem drawEffectPrefab;
     private ParticleSystem drawEffect;
+    private ParticleSystem drawEffect2;
 
     // Loss effect.
     [SerializeField] private ParticleSystem lossEffectPrefab;
@@ -32,9 +35,17 @@ public class EffectsManager : MonoBehaviour
 
     private void Start()
     {
+        // Two effects to prevent repeated effect bug!
         handChangeEffect = Instantiate(handChangeEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+        handChangeEffect2 = Instantiate(handChangeEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+
         winEffect = Instantiate(winEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+        winEffect2 = Instantiate(winEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+
         drawEffect = Instantiate(drawEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+        drawEffect2 = Instantiate(drawEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+
+
         lossEffect = Instantiate(lossEffectPrefab, GameManager.Instance.InGameCreatedObjects);
 
         // Event subscribings.
@@ -54,27 +65,40 @@ public class EffectsManager : MonoBehaviour
     }
 
 
-    private void PlayHandEffect(Transform pos)
+    private void PlayHandEffect(Transform myPos)
     {
-        handChangeEffect.transform.position = pos.position;
-        handChangeEffect.Play();
+        PlayUnactiveParticle(handChangeEffect, handChangeEffect2, myPos);
     }
 
     private void PlayWinEffect(Transform myPos, Transform _transform)
     {
-        winEffect.transform.position = myPos.position;
-        winEffect.Play();
+        PlayUnactiveParticle(winEffect, winEffect2, myPos);
     }
 
     private void PlayDrawEffect(Transform myPos, Transform _transform)
     {
-        drawEffect.transform.position = myPos.position;
-        drawEffect.Play();
+        PlayUnactiveParticle(drawEffect, drawEffect2, myPos);
     }
 
     private void PlayLossEffect(Transform myPos, Transform _transform)
     {
         lossEffect.Play();
+    }
+
+
+
+    private void PlayUnactiveParticle(ParticleSystem particleToPlayFirst, ParticleSystem particleToPlaySecond, Transform _transform)
+    {
+        if (!particleToPlayFirst.isPlaying)
+        {
+            particleToPlayFirst.transform.position = _transform.position;
+            particleToPlayFirst.Play();
+        }
+        else
+        {
+            particleToPlaySecond.transform.position = _transform.position;
+            particleToPlaySecond.Play();
+        }
     }
 
 }
