@@ -34,14 +34,13 @@ public class HandsManager : MonoBehaviour
 
     [Range(0.2f, 2f)]
     [SerializeField] private float maxSpeed;
+
+    private int spawnPositionIndex;
     #endregion
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
+        if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
         ResetAllHands();
@@ -51,9 +50,18 @@ public class HandsManager : MonoBehaviour
     {
         CreatePoolObjects();
         GenerateRandomSpeed();
-        InvokeRepeating(nameof(ActivatePooledObject), 2f, spawnSpeed);        
+        InvokeRepeating(nameof(ActivatePooledObject), 2f, spawnSpeed);
+        spawnPositionIndex = Random.Range(0, spawnPositions.Count);
+
+        // Event subscribings.
+        EventManager.Instance.OnLoss += DeactivateAllHands;
     }
 
+    private void OnDisable()
+    {
+        // Event unsubscribings.
+        EventManager.Instance.OnLoss -= DeactivateAllHands;
+    }
 
     private void Update()
     {
@@ -68,7 +76,6 @@ public class HandsManager : MonoBehaviour
             ChangeToNextHand(mainLeftHands, ref activeLeftHandID);
             EventManager.Instance.OnHandChange?.Invoke(mainLeftHands[0].transform);
         }
-
     }
 
     #region Hands Managing
@@ -156,9 +163,10 @@ public class HandsManager : MonoBehaviour
 
         if (obj != null)
         {
-            int randomID = Random.Range(0, spawnPositions.Count);
+            // If index is 0, change it to 1. If not, change it to 0.
+            spawnPositionIndex = spawnPositionIndex == 0 ? 1 : 0;
 
-            obj.transform.position = spawnPositions[randomID].position;
+            obj.transform.position = spawnPositions[spawnPositionIndex].position;
             obj.SetActive(true);
         }
         else
@@ -195,6 +203,14 @@ public class HandsManager : MonoBehaviour
                 return true;
         }
         return false;
+    }
+
+    private void DeactivateAllHands(Transform myTransform, Transform otherTransform)
+    {
+        foreach (GameObject hand in handsPool)
+        {
+            hand.SetActive(false);
+        }
     }
     #endregion
 }
