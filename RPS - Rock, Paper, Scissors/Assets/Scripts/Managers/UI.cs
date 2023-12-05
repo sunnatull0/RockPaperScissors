@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System.Runtime.CompilerServices;
+using DG.Tweening;
 
 public class UI : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class UI : MonoBehaviour
     [SerializeField] private GameObject healthParent;
     [SerializeField] private Image healthBar;
     [SerializeField] private float healthChangeSpeed;
-    private float currentValue;
+    private float currentHealthValue;
     private float targetValue;
 
     [Header("Score")]
@@ -36,7 +36,6 @@ public class UI : MonoBehaviour
     [Header("GameOver")]
     [SerializeField] private GameObject gameOverParent;
     [SerializeField] private TMP_Text gameOverText;
-    [SerializeField] private string gameOverTitle;
     #endregion
 
 
@@ -48,15 +47,25 @@ public class UI : MonoBehaviour
 
     private void Start()
     {
-        HideAll();
+        Hide(
+            healthParent,
+            scoreParent,
+            startPlayingParent,
+            waitingParent,
+            countDownParent,
+            gameOverParent
+            );
+
         Show(waitingParent);
 
-        currentValue = Health._Health;
+        currentHealthValue = Health._Health;
         UpdateScore();
 
         // Event subscribing.
         EventManager.Instance.OnWin += UpdateScoreUI;
         EventManager.Instance.OnDraw += UpdateHealthBar;
+        EventManager.Instance.OnLoss += UpdateGameOverPanel;
+        EventManager.Instance.OnLoss += ActivateGameOver;
         EventManager.Instance.OnStateChanged += OnStateChangedActions;
     }
 
@@ -65,6 +74,8 @@ public class UI : MonoBehaviour
         // Event unsubscribing.
         EventManager.Instance.OnWin -= UpdateScoreUI;
         EventManager.Instance.OnDraw -= UpdateHealthBar;
+        EventManager.Instance.OnLoss -= UpdateGameOverPanel;
+        EventManager.Instance.OnLoss -= ActivateGameOver;
         EventManager.Instance.OnStateChanged -= OnStateChangedActions;
     }
 
@@ -77,7 +88,7 @@ public class UI : MonoBehaviour
     // Health.
     private void UpdateHealthBar(Transform myTransform, Transform otherTransform)
     {
-        currentValue = (float)Health._Health / Health.Instance.defaultHealth;
+        currentHealthValue = (float)Health._Health / Health.Instance.defaultHealth;
 
         // Update bar after health has been changed.
         GameManager.Instance.PlayAfterDelay(Decrease);
@@ -93,18 +104,18 @@ public class UI : MonoBehaviour
 
     private IEnumerator DecreaseSmoothly()
     {
-        while (currentValue > targetValue)
+        while (currentHealthValue > targetValue)
         {
-            currentValue = Mathf.Lerp(currentValue, targetValue, Time.deltaTime * healthChangeSpeed);
+            currentHealthValue = Mathf.Lerp(currentHealthValue, targetValue, Time.deltaTime * healthChangeSpeed);
 
-            healthBar.fillAmount = currentValue;
+            healthBar.fillAmount = currentHealthValue;
 
             yield return null;
         }
 
-        currentValue = targetValue;
+        currentHealthValue = targetValue;
 
-        healthBar.fillAmount = currentValue;
+        healthBar.fillAmount = currentHealthValue;
     }
     #endregion
 
@@ -145,15 +156,19 @@ public class UI : MonoBehaviour
         // Handle UI when Game is playing.
         if (GameManager.Instance.IsGameActive)
         {
-            Show(healthParent);
-            Show(scoreParent);
-            Show(startPlayingParent);
+            Show(
+                healthParent,
+                scoreParent,
+                startPlayingParent
+                );
         }
         else
         {
-            Hide(healthParent);
-            Hide(scoreParent);
-            Hide(startPlayingParent);
+            Hide(
+                healthParent,
+                scoreParent,
+                startPlayingParent
+                );
         }
 
 
@@ -161,7 +176,6 @@ public class UI : MonoBehaviour
         if (GameManager.Instance.isGameOver)
         {
             Show(gameOverParent);
-            UpdateGameOverPanel();
         }
         else
         {
@@ -169,26 +183,29 @@ public class UI : MonoBehaviour
         }
     }
 
-    private void Show(GameObject obj) => obj.SetActive(true);
-
-    private void Hide(GameObject obj) => obj.SetActive(false);
-
-    private void HideAll()
+    private void Show(params GameObject[] args)
     {
-        Hide(healthParent);
-        Hide(scoreParent);
-        Hide(waitingParent);
-        Hide(countDownParent);
-        Hide(startPlayingParent);
-        Hide(gameOverParent);
+        foreach (GameObject obj in args)
+        {
+            obj.SetActive(true);
+        }
+    }
+
+    private void Hide(params GameObject[] args)
+    {
+        foreach (GameObject obj in args)
+        {
+            obj.SetActive(false);
+        }
     }
     #endregion
 
+
     #region GameOver Panel.
-    private void UpdateGameOverPanel()
+    private void UpdateGameOverPanel(Transform myTransform, Transform otherTransform)
     {
         // Variable for GameOver text.
-        string title = "";
+        string title;
 
         // Changing the variable depending on the Score.
         switch (ScoreManager.Score)
@@ -216,6 +233,11 @@ public class UI : MonoBehaviour
         }
 
         gameOverText.text = title;
+    }
+
+    private void ActivateGameOver(Transform myTransform, Transform otherTransform)
+    {
+        gameOverParent.transform.DOLocalMoveY(0f, 1.5f).SetEase(Ease.OutBounce);
     }
     #endregion
 }

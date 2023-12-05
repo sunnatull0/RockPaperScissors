@@ -5,7 +5,7 @@ public class MovingHand : MonoBehaviour
 
     #region Variables
     private Rigidbody2D rb;
-    private float speed = 350f;
+    private float speed = 100f;
     #endregion
 
 
@@ -14,17 +14,14 @@ public class MovingHand : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (GameManager.Instance.IsGameActive)
-            Move();
-        
+        Move();
     }
-
 
     private void Move()
     {
-        rb.velocity = Vector2.down * speed * Time.deltaTime;
+        rb.velocity = speed * Time.fixedDeltaTime * Vector2.down;
     }
 
 }
