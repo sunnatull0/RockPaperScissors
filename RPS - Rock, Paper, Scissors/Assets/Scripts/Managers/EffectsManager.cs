@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EffectsManager : MonoBehaviour
 {
@@ -29,31 +30,25 @@ public class EffectsManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
         else Destroy(gameObject);
     }
 
     private void Start()
     {
-        // Two effects to prevent repeated effect bug!
-        handChangeEffect = Instantiate(handChangeEffectPrefab, GameManager.Instance.InGameCreatedObjects);
-        handChangeEffect2 = Instantiate(handChangeEffectPrefab, GameManager.Instance.InGameCreatedObjects);
-
-        winEffect = Instantiate(winEffectPrefab, GameManager.Instance.InGameCreatedObjects);
-        winEffect2 = Instantiate(winEffectPrefab, GameManager.Instance.InGameCreatedObjects);
-
-        drawEffect = Instantiate(drawEffectPrefab, GameManager.Instance.InGameCreatedObjects);
-        drawEffect2 = Instantiate(drawEffectPrefab, GameManager.Instance.InGameCreatedObjects);
-
-
-        lossEffect = Instantiate(lossEffectPrefab, GameManager.Instance.InGameCreatedObjects);
-
         // Event subscribings.
         EventManager.Instance.OnHandChange += PlayHandEffect;
         EventManager.Instance.OnWin += PlayWinEffect;
         EventManager.Instance.OnDraw += PlayDrawEffect;
         EventManager.Instance.OnLoss += PlayLossEffect;
+
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
 
     private void OnDisable()
     {
@@ -62,6 +57,16 @@ public class EffectsManager : MonoBehaviour
         EventManager.Instance.OnWin -= PlayWinEffect;
         EventManager.Instance.OnDraw -= PlayDrawEffect;
         EventManager.Instance.OnLoss -= PlayLossEffect;
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            InstantiateAll();
+        }
     }
 
 
@@ -99,6 +104,21 @@ public class EffectsManager : MonoBehaviour
             particleToPlaySecond.transform.position = _transform.position;
             particleToPlaySecond.Play();
         }
+    }
+
+    private void InstantiateAll()
+    {
+        // Two effects to prevent repeated effect bug!
+        handChangeEffect = Instantiate(handChangeEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+        handChangeEffect2 = Instantiate(handChangeEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+
+        winEffect = Instantiate(winEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+        winEffect2 = Instantiate(winEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+
+        drawEffect = Instantiate(drawEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+        drawEffect2 = Instantiate(drawEffectPrefab, GameManager.Instance.InGameCreatedObjects);
+
+        lossEffect = Instantiate(lossEffectPrefab, GameManager.Instance.InGameCreatedObjects);
     }
 
 }

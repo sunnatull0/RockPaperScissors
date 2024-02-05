@@ -84,6 +84,7 @@ public class UI : MonoBehaviour
         countText.text = Mathf.Ceil(GameManager.Instance.GetCountDownTimer()).ToString();
     }
 
+
     #region Health Methods.
     // Health.
     private void UpdateHealthBar(Transform myTransform, Transform otherTransform)
@@ -240,4 +241,5 @@ public class UI : MonoBehaviour
         gameOverParent.transform.DOLocalMoveY(0f, 1.5f).SetEase(Ease.OutBounce);
     }
     #endregion
+
 }

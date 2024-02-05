@@ -38,25 +38,17 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Event subscribing.
-        EventManager.Instance.OnWin += (Transform myTransform, Transform otherTransform) => { otherTransform.gameObject.SetActive(false); };
-        EventManager.Instance.OnDraw += (Transform myTransform, Transform otherTransform) => { otherTransform.gameObject.SetActive(false); };
-        EventManager.Instance.OnLoss += (Transform myTransform, Transform otherTransform) =>
-        {
-            state = State.GameOver;
-            EventManager.Instance.OnStateChanged?.Invoke();
-        };
+        EventManager.Instance.OnWin += DeactivateOtherHand;
+        EventManager.Instance.OnDraw += DeactivateOtherHand;
+        EventManager.Instance.OnLoss += EndTheGame;
     }
 
     private void OnDisable()
     {
         // Event unsubscribing.
-        EventManager.Instance.OnWin -= (Transform myTransform, Transform otherTransform) => { otherTransform.gameObject.SetActive(false); };
-        EventManager.Instance.OnDraw -= (Transform myTransform, Transform otherTransform) => { otherTransform.gameObject.SetActive(false); };
-        EventManager.Instance.OnLoss -= (Transform myTransform, Transform otherTransform) =>
-        {
-            state = State.GameOver;
-            EventManager.Instance.OnStateChanged?.Invoke();
-        };
+        EventManager.Instance.OnWin -= DeactivateOtherHand;
+        EventManager.Instance.OnDraw -= DeactivateOtherHand;
+        EventManager.Instance.OnLoss -= EndTheGame;
     }
 
     private void Update()
@@ -94,10 +86,23 @@ public class GameManager : MonoBehaviour
     }
 
 
+    private void DeactivateOtherHand(Transform myTransform, Transform otherTransform)
+    {
+        otherTransform.gameObject.SetActive(false);
+    }
+
+    private void EndTheGame(Transform myTransform, Transform otherTransform)
+    {
+        state = State.GameOver;
+        EventManager.Instance.OnStateChanged?.Invoke();
+    }
+
+    
     public float GetCountDownTimer()
     {
         return countDownTimer;
     }
+
 
 
     // Function for playing a certain method after one frame delay.
@@ -108,4 +113,5 @@ public class GameManager : MonoBehaviour
         yield return null;
         _action();
     }
+
 }

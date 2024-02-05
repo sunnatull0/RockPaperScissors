@@ -1,8 +1,9 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class AnimationManager : MonoBehaviour
 {
-    
+
     public static AnimationManager Instance;
 
     #region Variables.
@@ -21,46 +22,46 @@ public class AnimationManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
     }
 
     private void Start()
     {
-        EventManager.Instance.OnWin += (Transform myTr, Transform otherTr) =>
-        {
-            UIBasicAnimator.Rebind();
-            UIBasicAnimator.SetTrigger(Score);
-
-            UIEffectsAnimator.Rebind();
-            UIEffectsAnimator.SetTrigger(Win);
-        };
-        EventManager.Instance.OnDraw += (Transform myTr, Transform otherTr) =>
-        {
-            UIEffectsAnimator.Rebind();
-            UIEffectsAnimator.SetTrigger(Draw);
-        };
+        EventManager.Instance.OnWin += PlayWinAnimations;
+        EventManager.Instance.OnDraw += PlayDrawAnimations;
         EventManager.Instance.OnStateChanged += OnStateChaged;
     }
 
     private void OnDisable()
     {
-        EventManager.Instance.OnWin -= (Transform myTr, Transform otherTr) =>
-        {
-            UIBasicAnimator.Rebind();
-            UIBasicAnimator.SetTrigger(Score);
-
-            UIEffectsAnimator.Rebind();
-            UIEffectsAnimator.SetTrigger(Win);
-        };
-        EventManager.Instance.OnDraw -= (Transform myTr, Transform otherTr) =>
-        {
-            UIEffectsAnimator.Rebind();
-            UIEffectsAnimator.SetTrigger(Draw);
-        };
+        EventManager.Instance.OnWin -= PlayWinAnimations;
+        EventManager.Instance.OnDraw -= PlayDrawAnimations;
         EventManager.Instance.OnStateChanged -= OnStateChaged;
     }
 
+
+    private void PlayWinAnimations(Transform myTr, Transform otherTr)
+    {
+        UIBasicAnimator.Rebind();
+        UIBasicAnimator.SetTrigger(Score);
+
+        UIEffectsAnimator.Rebind();
+        UIEffectsAnimator.SetTrigger(Win);
+    }
+
+    private void PlayDrawAnimations(Transform myTr, Transform otherTr)
+    {
+        UIEffectsAnimator.Rebind();
+        UIEffectsAnimator.SetTrigger(Draw);
+    }
 
     private void OnStateChaged()
     {

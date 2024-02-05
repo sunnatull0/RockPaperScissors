@@ -78,6 +78,7 @@ public class HandsManager : MonoBehaviour
         }
     }
 
+
     #region Hands Managing
     // Hands Managing
     private void ChangeToNextHand(List<GameObject> mainHands, ref int handID)
@@ -213,4 +214,5 @@ public class HandsManager : MonoBehaviour
         }
     }
     #endregion
+
 }

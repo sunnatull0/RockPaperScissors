@@ -11,14 +11,19 @@ public class ScoreManager : MonoBehaviour
     }
 
     private void Start()
-    {   
+    {
         // Event subscribing.
-        EventManager.Instance.OnWin += (Transform myTransform, Transform otherTransform) => { Score++; };
+        EventManager.Instance.OnWin += AddScore;
     }
 
     private void OnDisable()
     {
         // Event unsubscribing.
-        EventManager.Instance.OnWin -= (Transform myTransform, Transform otherTransform) => { Score++; };
+        EventManager.Instance.OnWin -= AddScore;
+    }
+
+    private void AddScore(Transform myTransform, Transform otherTransform)
+    {
+        Score++;
     }
 }
